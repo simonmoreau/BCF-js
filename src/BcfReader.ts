@@ -1,15 +1,19 @@
-import {IMarkup, MarkupViewpoint} from "./schema";
+import {IMarkup, MarkupViewpoint, IVersion} from "./schema";
 import {Helpers} from "./Helpers";
 import {VisualizationInfo} from "./schema";
 import {Reader, TypedArray, unzip, Zip, ZipEntry, ZipInfo} from 'unzipit';
+import { Console } from "console";
 
 export class BcfReader{
 
     bcf_archive: ZipInfo | undefined
     topics: Topic[] = [];
+    
 
     read = async (src: string | ArrayBuffer | TypedArray | Blob | Reader) => {
+
         try {
+
             const topics: ZipEntry[] = [];
 
             this.bcf_archive = await unzip(src);
@@ -19,6 +23,11 @@ export class BcfReader{
             for (const [name, entry] of Object.entries(entries)) {
                 if (name.endsWith('.bcf')) {
                     topics.push(entry);
+                }
+                else if (name == 'bcf.version') {
+                    const version : Version = new Version(entry)
+                    await version.read();
+                    console.log(version)
                 }
             }
 
@@ -36,6 +45,20 @@ export class BcfReader{
 
     getEntry = (name: string) => {
         return this.bcf_archive?.entries[name];
+    }
+}
+
+export class Version {
+
+    readonly version_file: ZipEntry;
+    version: IVersion | undefined;
+
+    constructor( version: ZipEntry) {
+        this.version_file = version;
+    }
+
+    read = async () => {
+        this.version = Helpers.GetVersion(await this.version_file.text());
     }
 }
 

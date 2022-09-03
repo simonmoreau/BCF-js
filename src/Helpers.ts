@@ -1,4 +1,4 @@
-import {IComment, IMarkup, MarkupViewpoint} from "./schema";
+import {IComment, IMarkup, IVersion, MarkupViewpoint} from "./schema";
 import parser from "fast-xml-parser";
 import {
     Component,
@@ -45,6 +45,15 @@ export namespace Helpers {
             },
             comments: Helpers.GetComments(Markup.Comment),
             viewpoints: Helpers.GetViewpoints(Markup.Viewpoints)
+        };
+    }
+
+    export function GetVersion(xmlString: any): IVersion {
+        const { Version } = parser.parse(xmlString, xmlParserOptions);
+
+        return {
+            VersionId: Version['@_VersionId'],
+            DetailedVersion: Version['DetailedVersion'],
         };
     }
 
