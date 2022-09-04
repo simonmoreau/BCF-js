@@ -27,7 +27,6 @@ export class BcfReader{
                 else if (name == 'bcf.version') {
                     const version : Version = new Version(entry)
                     await version.read();
-                    console.log(version)
                 }
             }
 
@@ -107,11 +106,11 @@ export class Topic {
         }
     }
 
-    getViewpointSnapshot = async (viewpoint: MarkupViewpoint) : Promise<Blob | undefined> => {
+    getViewpointSnapshot = async (viewpoint: MarkupViewpoint) : Promise<ArrayBuffer | undefined> => {
         if(!viewpoint || !this.markup) return;
         const entry = this.reader.getEntry(`${this.markup.topic.guid}/${viewpoint.snapshot}`);
         if(entry){
-            return await entry.blob()
+            return await entry.arrayBuffer()
         }
     }
 }

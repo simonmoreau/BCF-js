@@ -9,7 +9,7 @@ describe('Reader module module', () => {
       const reader = new BcfReader();
       await reader.read(file);
   
-      reader.topics.forEach((topic) => {
+      reader.topics.forEach(async (topic) => {
   
           expect(topic.markup).toBeDefined()
           
@@ -17,17 +17,18 @@ describe('Reader module module', () => {
           {
             expect(topic.viewpoints.length).toBeGreaterThan(0)
             if(topic.viewpoints.length > 0){
-                console.log(topic.viewpoints[0].perspective_camera)
+                expect(topic.viewpoints[0].perspective_camera).toBeDefined()
     
                 const v = topic?.markup?.viewpoints;
     
                 expect(v).toBeDefined();
     
                 if(!v) return;
-    
-                topic.getViewpointSnapshot(v[0]).then((data) => {
-                    console.log(data);
-                })
+
+                var imageArrayBuffer : ArrayBuffer | undefined = await topic.getViewpointSnapshot(v[0])
+
+                expect(imageArrayBuffer).toBeDefined()
+
             }
           }
       })
