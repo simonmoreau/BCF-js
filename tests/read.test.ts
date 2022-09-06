@@ -22,12 +22,8 @@ describe('Reader module module', () => {
                 const v = topic?.markup?.viewpoints;
     
                 expect(v).toBeDefined();
-    
-                if(!v) return;
 
-                var imageArrayBuffer : ArrayBuffer | undefined = await topic.getViewpointSnapshot(v[0])
-
-                expect(imageArrayBuffer).toBeDefined()
+                expect(topic.viewpoints[0].snapshot).toBeDefined();
 
             }
           }

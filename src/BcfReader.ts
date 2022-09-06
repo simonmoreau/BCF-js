@@ -99,7 +99,11 @@ export class Topic {
 
                 if (!file) throw new Error("Missing Visualization Info");
 
-                const viewpoint = Helpers.GetViewpoint(await file.text());
+                const viewpoint : VisualizationInfo = Helpers.GetViewpoint(await file.text());
+
+                const snapshot : ArrayBuffer | undefined = await this.getViewpointSnapshot(entry);
+                if (snapshot) viewpoint.snapshot = snapshot
+                
                 this.viewpoints.push(viewpoint);
                 // Helpers.WriteJsonToFile(`./output/${name}/${id}/${entry.viewpoint}.json`, viewpoint);
             }
@@ -113,4 +117,6 @@ export class Topic {
             return await entry.arrayBuffer()
         }
     }
+
+    
 }

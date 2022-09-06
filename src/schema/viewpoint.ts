@@ -5,6 +5,7 @@ export interface VisualizationInfo {
     perspective_camera?: PerspectiveCamera,
     lines?: Line[],
     clipping_planes?: ClippingPlane[],
+    snapshot?: ArrayBuffer
     // bitmaps?: Bitmap[]
 }
 
